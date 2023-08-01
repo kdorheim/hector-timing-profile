@@ -13,23 +13,25 @@ knitr::opts_chunk$set(
 
 # hector-timing-profile
 
-<!-- badges: start -->
-<!-- badges: end -->
 
-The goal of hector-timing-profile is to ...
+The goal of hector-timing-profile is to save a copy of the scripts and results from a look at how long it takes to generate large ensembles of Hector runs. This is not a robust analysis. 
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
+```{r}
+library(ggplot2)
+theme_set(theme_bw())
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+Load the results produced from the `generate_ensemble.R` script, it is a file that contains information about how long it took to generate and ensemble of X size. 
 
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r }
+df <- read.csv(here::here("rslt.csv"))
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub.
+```{r}
+ggplot(data = df) + 
+  geom_point(aes(log(size), elapsed/60)) + 
+  labs(y = "Elapsed Run Time (min)", 
+       x = "Log(Ensemble Size)", 
+       title = "Hector Run Time")
+```
+As of July 2023 it takes an hour and 12 mins to generate an ensemble size 5,000. 
